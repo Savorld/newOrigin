@@ -1,0 +1,3 @@
+{{ object.pName }}
+{{ object.pDetail }}
+{{ object.pDesc }}
