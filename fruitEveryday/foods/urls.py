@@ -16,7 +16,9 @@ urlpatterns = [
 
 
     url(r'^userCenterInfo([0-9]*)/$', userCenterInfo, name='userCenterInfo'),
-    url(r'^userCenterOrder/page([0-9]*)/$', userCenterOrder, name='userCenterOrder'),
+    url(r'^recentMap/$', recentMap, name='recentMap'),
+    url(r'^userCenterOrder/page([0-9]*)/$',
+        userCenterOrder, name='userCenterOrder'),
     url(r'^userCenterSite/$', userCenterSite, name='userCenterSite'),
     url(r'^userCenterSiteHandle/$', userCenterSiteHandle, name='userCenterSiteHandle'),
     

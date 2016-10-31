@@ -32,7 +32,8 @@ class ProductInfoAdmin(admin.ModelAdmin):
 class SortAdmin(admin.ModelAdmin):
     list_display = ['id', 'sClass']
     inlines = [ProductInfoInline]
-
+class RencentMapAdmin(admin.ModelAdmin):
+    list_display = ['id', 'rUser','rProName','rTime']
 
 admin.site.register(UserInfo, UserInfoAdmin)
 admin.site.register(CartList, CartListAdmin)
@@ -40,3 +41,4 @@ admin.site.register(OrderList, OrderListAdmin)
 admin.site.register(DetailOrder, DetailOrderAdmin)
 admin.site.register(ProductInfo, ProductInfoAdmin)
 admin.site.register(Sort, SortAdmin)
+admin.site.register(RencentMap, RencentMapAdmin)

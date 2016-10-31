@@ -40,14 +40,16 @@
 				data1 = {
 					'cPrice':{{detailPro.pPrice}},
 					'cNum':pre,
-					'cUser':'python',
-					'cProduct':'{{detailPro.id}}'
+					'cUser':$name.text(),
+					'cProduct':{{detailPro.id}},
 				};
 				$.post('/intoCart/',data1);
 				cartNum++;
 				$('#show_count').html(cartNum);
 
 			}); 
+			// 记录用户的最近浏览详细
+			$.post('/recentMap/',{'pro':{{detailPro}}})
 });
 
 </script>

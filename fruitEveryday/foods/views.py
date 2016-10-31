@@ -109,17 +109,23 @@ def intoCart(request, dic, *args):
     '''
     加入购物车
     '''
-    cNum = request.POST.get('cNum')
-    pro = request.POST.get('cProduct')
-    cUser = UserInfo.objects.get(uName=dic['username'])
-    cProduct = ProductInfo.objects.get(pk=int(pro))
-    cPrice = cProduct.pPrice
-
+    cNumNew = int(request.POST['cNum'])
+    cUserNew = UserInfo.objects.get(uName=dic['username'])
+    cProductNew = ProductInfo.objects.get(pk=request.POST['cProduct'])
+    cPriceNew = cProductNew.pPrice
+    try:
+        oldCart = CartList.objects.get(
+            cUser_id=cUserNew, cProduct_id=cProductNew)
+    except:
+        oldCart = 0
+    if oldCart != 0:
+        cNumNew += oldCart.cNum
+        oldCart.delete()
     CartList.objects.create(
-        cUser=cUser,
-        cProduct=cProduct,
-        cPrice=cPrice,
-        cNum=cNum,
+        cUser=cUserNew,
+        cProduct=cProductNew,
+        cPrice=cPriceNew,
+        cNum=cNumNew,
     )
     return HttpResponse(cNum)
 
@@ -195,14 +201,30 @@ def userCenterInfo(request, dic, *args):
     用户中心个人信息
     '''
     pageNum = args[0]
-    goodsRecent = ProductInfo.objects.all()[0:5]
     users = UserInfo.objects.get(uName=dic['username'])
+    Recent = RencentMap.objects.filter(rUser_id=users)
+    goodsRecent = []
+    for re in Recent[::-1]:
+        new = ProductInfo.objects.get(pk=re.rProName.id)
+        if new not in goodsRecent:
+            goodsRecent.append(new)
+    # goodsRecent =list(set(goodsRecent))[::-1]
     dic1 = {
         'users': users,
         'goodsRecent': goodsRecent
     }
     dic2 = dict(dic, **dic1)
     return render(request, 'foods/userCenterInfo.html', dic2)
+
+@decorate.loginYz
+@decorate.loginName
+def recentMap(request, dic, *args):
+    pro = ProductInfo.objects.get(pk=request.POST['pro'])
+    usr = UserInfo.objects.get(uName=dic['username'])
+    RencentMap.objects.create(
+        rUser=usr,
+        rProName=pro,
+    )
 
 
 @decorate.loginYz
