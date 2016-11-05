@@ -1,2 +1,6 @@
 # fresh
-django project
+
+This is a fresh project.
+
+
+
