@@ -16,14 +16,13 @@ def index(request, dic, *args):
     模板内部双层循环取值先
 
     '''
-   
-    # user = UserInfo.objects.get(uName=dic['username'])
-    # cart = CartList.objects.filter(cUser=user.id)
-    # countDate = cart.aggregate(Count('id'))
-    # dic['count'] = countDate['id__count']
+    user = UserInfo.objects.get(uName=dic['username'])
+    cart = CartList.objects.filter(cUser=user.id)
+    countDate = cart.aggregate(Count('id'))
 
     pro = Sort.objects.all()
     dic['proList'] = pro
+    dic['count'] = countDate['id__count']
     return render(request, 'foods/index.html', dic)
 
 
@@ -111,7 +110,7 @@ def intoCart(request, dic, *args):
     加入购物车
     '''
     cNum = request.POST.get('cNum')
-    pro = request.POST.get('id')
+    pro = request.POST.get('cProduct')
     cUser = UserInfo.objects.get(uName=dic['username'])
     cProduct = ProductInfo.objects.get(pk=int(pro))
     cPrice = cProduct.pPrice
@@ -290,9 +289,8 @@ def userCenterSiteHandle(request, dic, *args):
 def cart(request, dic, *args):
 
     # 查询条件
-    user = UserInfo.objects.get(uName = dic['username'])
-    carts = CartList.objects.filter(cUser=user.id)
-    cartLen = len(carts)
+    carts = CartList.objects.all()
+    b = len(carts)
     list2 = []
     ProductNumbers = 0
     for i in carts:
@@ -302,20 +300,19 @@ def cart(request, dic, *args):
             ProductNumbers = ProductNumbers + ProductNumber
             values = {
                 'id': i.id,
+                'ProductID_id': i.cProduct.id,
                 'pImg': d.pImg,
-                'cNum': i.cNum,
-                'pUnit': d.pUnit,
                 'pName': d.pName,
                 'pPrice': d.pPrice,
-                'pStock': d.pStock,
-                'ProductID': i.cProduct.id,
+                'cNum': i.cNum,
                 'ProductNumber': ProductNumber,
+                'pUnit': d.pUnit,
+                'pStock': d.pStock,
             }
             list2.append(values)
-    print list2
 
     dic1 = {
-        "cartLen": cartLen,
+        "b": b,
         'list2': list2,
         "ProductNumbers": ProductNumbers,
     }
@@ -357,23 +354,21 @@ def baseBottom(request):
     return render(request, 'foods/baseBottom.html')
 
 
-# @decorate.loginName
-# def base(request, dic, *args):
-#     '''
-#     实现购物车的显示 
-#     '''
-#     user = UserInfo.objects.get(uName=dic['username'])
-#     cart = CartList.objects.filter(cUser=user.id)
-#     countDate = cart.aggregate(Count('id'))
-#     dic1 = {
-#         'count': countDate['id__count'],
-#     }
-#     dic2 = dict(dic, **dic1)
+@decorate.loginName
+def base(request, dic, *args):
+    '''
+    实现购物车的显示 
+    '''
+    user = UserInfo.objects.get(uName=dic['username'])
+    cart = CartList.objects.filter(cUser=user.id)
+    countDate = cart.aggregate(Count('id'))
+    dic1 = {
+        'count': countDate['id__count'],
+    }
+    dic2 = dict(dic, **dic1)
 
-#     return render(request, 'foods/base.html', dic2)
+    return render(request, 'foods/base.html', dic2)
 
-def base(request):
-    return render(request, 'foods/base.html')
 
 def userCenterBase(request):
     return render(request, 'foods/userCenterBase.html')

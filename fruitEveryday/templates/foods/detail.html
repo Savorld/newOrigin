@@ -19,7 +19,7 @@
 				total.html((pri*pre).toFixed(2));
 			};
 			multi();
-			// 绑定‘数量+’按钮的点击事件 
+			// 绑定‘数量+’按钮的点击事件
 			add.click(function(){
 				pre++;
 				num.val(pre);
@@ -34,18 +34,18 @@
 				multi();
 			});
 			// 绑定‘加入购物车’按钮的点击事件（尚未完成）
-			// $('#show_count').html({{cartNumData}});
+			$('#show_count').html({{cartNumData}});
 			cartNum = $('#show_count').html({{cartNumData}});
 			$('.add_cart').click(function(){
 				data1 = {
 					'cPrice':{{detailPro.pPrice}},
 					'cNum':pre,
 					'cUser':'python',
-					'id':'{{detailPro.id}}'
+					'cProduct':'{{detailPro.id}}'
 				};
 				$.post('/intoCart/',data1);
 				cartNum++;
-				// $('#show_count').html(cartNum);
+				$('#show_count').html(cartNum);
 
 			}); 
 });

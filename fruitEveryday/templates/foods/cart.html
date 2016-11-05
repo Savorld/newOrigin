@@ -77,12 +77,10 @@
 				$sum += parseFloat($('.col07').html())	
 				$('.settlements').find('.col03').find('em').text($sum)		
 			})
-		
 		})
 	});
-
 </script>
-	<div class="total_count">全部商品<em>{{cartLen}}</em>件</div>	
+	<div class="total_count">全部商品<em>{{b}}</em>件</div>	
 	<ul class="cart_list_th clearfix">
 		<li class="col01">商品名称</li>
 		<li class="col02">商品单位</li>
@@ -93,7 +91,7 @@
 	</ul>
 	{%for goods in list2%}
 	<ul class="cart_list_td clearfix">
-		<li class="col01 col16"><input type="checkbox" name="Checks" checked="checked" id="col01" value="{{goods.ProductID}}"></li>
+		<li class="col01 col16"><input type="checkbox" name="Checks" checked="checked" id="col01" value="{{goods.id}}"></li>
 		<li class="col02"><img src="/static/{{goods.pImg}}"></li>
 		<li class="col03">{{goods.pName}}<br><em>{{goods.pPrice}}元/kg</em></li>
 		<li class="col04">kg</li>
