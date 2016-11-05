@@ -375,3 +375,18 @@ def userCenterBase(request):
 
 def base(request):
     return render(request, 'foods/base.html')
+
+def subBill(request):
+    """
+    购物车数据提交后台处理
+    """
+    userSession = UserInfo.objects.get(pk=5)
+    ProductNumbers = request.POST['ProductNumbers']
+    OrderID = OrderList.objects.create(oSum=ProductNumbers, oIspay=False, oUser=userSession)
+    goodsId = request.POST['Checks']
+    saleSum = request.POST['saleSum']
+    # productPrice = request.POST['unitPrice']  # 原本是浮点型，因数据库字段设计有误，强制整型
+    detailOrder = DetailOrder.objects.create(dNum=saleSum, dPrice=ProductInfo.objects.get(pk=goodsId).pPrice,
+                                             dMain=OrderList.objects.get(pk=OrderID.id),
+                                             dProduct=ProductInfo.objects.get(pk=int(goodsId)))
+    return redirect('/userCenterSite/')

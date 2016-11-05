@@ -89,29 +89,38 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-	{%for goods in list2%}
-	<ul class="cart_list_td clearfix">
-		<li class="col01 col16"><input type="checkbox" name="Checks" checked="checked" id="col01" value="{{goods.id}}"></li>
-		<li class="col02"><img src="/static/{{goods.pImg}}"></li>
-		<li class="col03">{{goods.pName}}<br><em>{{goods.pPrice}}元/kg</em></li>
-		<li class="col04">kg</li>
-		<li class="col05">{{goods.pPrice}}元</li>
-		<li class="col06">
-			<div class="num_add">
-				<a href="javascript:;" class="add fl" id={{goods.pStock}}>+</a>
-				<input type="text" class="num_show fl" value="{{goods.cNum}}" id="{{goods.id}}">
-				<a href="javascript:;" class="minus fl">-</a>	
-			</div>
-		</li>
-		<li class="col07">{{goods.ProductNumber}}元</li>
-		<li class="col08"><a href="/CartList/delete{{goods.id}}/">删除</a></li>
-	</ul>
-	{%endfor%}
-	<ul class="settlements">
-		<li class="col01"><input type="checkbox" name="" checked="checked" id="CheckAll"></li>
-		<li class="col02">全选/全不选</li>
-		<li class="col03">合计(不含运费)：<span>¥</span><em>{{ProductNumbers}}</em><br>共计<b>{{b}}</b>件商品</li>
-		<li class="col04"><a href="{%url 'main:placeOrder'%}">去结算</a></li>
-	</ul>
+<form action="/subBill/" method="post">
+    {% for goods in list2 %}
+        <ul class="cart_list_td clearfix">
+            <li class="col01 col16"><input type="checkbox" name="Checks" checked="checked" id="col01"
+                                           value="{{ goods.ProductID_id }}"></li>
+            <li class="col02"><img src="/static/{{ goods.pImg }}"></li>
+            <li class="col03">{{ goods.pName }}<br><em>{{ goods.pPrice }}元/kg</em>
+            </li>
+            <li class="col04">kg</li>
+            <li class="col05">{{ goods.pPrice }}元</li>
+            <li class="col06">
+                <div class="num_add">
+                    <a href="javascript:;" class="add fl" id={{ goods.pStock }}>+</a>
+                    <input type="text" class="num_show fl" name="saleSum" value="{{ goods.cNum }}"
+                           id="{{ goods.id }}">
+                    <a href="javascript:;" class="minus fl">-</a>
+                </div>
+            </li>
+            <li class="col07">{{ goods.ProductNumber }}元</li>
+            <li class="col08"><a href="/CartList/delete{{ goods.id }}/">删除</a></li>
+        </ul>
+    {% endfor %}
+    <ul class="settlements">
+        <li class="col01"><input type="checkbox" name="" checked="checked" id="CheckAll"></li>
+        <li class="col02">全选/全不选</li>
+        <li class="col03">合计(不含运费)：<span>¥</span><em>{{ ProductNumbers }}</em><br>共计<b>{{ b }}</b>件商品
+        </li>
+        <input name="ProductNumbers" value="{{ ProductNumbers }}" type="hidden">
+        <input name="unitPrice" value="{{ goods.pPrice }}" type="hidden">
+        <input name="saleNum" value="{{ b }}" type="hidden">
+        <li class="col04"><input type="submit" value="去结算"></li>
+    </ul>
+</form>
 
 {%endblock contentUser%}
