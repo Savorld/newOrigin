@@ -1,0 +1,142 @@
+{% extends "foods/base.html" %}
+<!-- {% load staticfiles %} -->
+{%block goodsList%}
+<script type="text/javascript">
+	$(function(){
+			add = $('.add');
+			minus = $('.minus');
+			//num：记录加入到购物车的订单数量
+			num = $('.num_show');
+			
+			total = $('.total em');
+			price = $('.show_pirze em');
+			// pre：记录数量的变量
+			pre = parseInt(num.attr('value'));
+
+			// 封装计算总价的函数，执行一次
+			function multi(){
+				pri = parseInt(price.html());
+				total.html((pri*pre).toFixed(2));
+			};
+			multi();
+			// 绑定‘数量+’按钮的点击事件 
+			add.click(function(){
+				pre++;
+				num.val(pre);
+				multi();
+			});
+			// 绑定‘数量-’按钮的点击事件
+			minus.click(function(){
+				if(pre>1){
+					pre--;
+				};
+				num.val(pre);
+				multi();
+			});
+			// 绑定‘加入购物车’按钮的点击事件（尚未完成）
+			// $('#show_count').html({{cartNumData}});
+			cartNum = $('#show_count').html({{cartNumData}});
+			$('.add_cart').click(function(){
+				data1 = {
+					'cPrice':{{detailPro.pPrice}},
+					'cNum':pre,
+					'cUser':'python',
+					'id':'{{detailPro.id}}'
+				};
+				$.post('/intoCart/',data1);
+				cartNum++;
+				// $('#show_count').html(cartNum);
+
+			}); 
+});
+
+</script>
+<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>	
+				<span></span>			
+				<ul class="subnav">
+					<li><a href="{%url 'main:lists' '1'%}" class="fruit">新鲜水果</a></li>
+					<li><a href="#" class="seafood">海鲜水产 {{cartNumData}}</a></li>
+					<li><a href="#" class="meet">猪牛羊肉</a></li>
+					<li><a href="#" class="egg">禽类蛋品</a></li>
+					<li><a href="#" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="#" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="{%url 'main:index'%}">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+{%endblock%}
+{%block content%}
+	<div class="breadcrumb">
+		<a href="{%url 'main:index'%}">全部分类</a>
+		<span>></span>
+		<a href="{%url 'main:lists' '1'%}">新鲜水果</a>
+		<span>></span>
+		<a href="">商品详情</a>
+	</div>
+
+	<div class="goods_detail_con clearfix">
+		<div class="goods_detail_pic fl"><img src="/static/{{detailPro.pImg}}"></div>
+
+		<div class="goods_detail_list fr">
+			<h3>{{detailPro.pName}}</h3>
+			<p>{{detailPro.pDesc}}</p>
+			<div class="prize_bar">
+				<span class="show_pirze">¥<em>{{detailPro.pPrice}}</em></span>
+				<span class="show_unit">单  位：{{detailPro.pUnit}}</span>
+			</div>
+			<div class="goods_num clearfix">
+				<div class="num_name fl">数 量：</div>
+				<div class="num_add fl">
+					<input type="text" class="num_show fl" value="1">
+					<a href="javascript:;" class="add fr">+</a>
+					<a href="javascript:;" class="minus fr">-</a>	
+				</div> 
+			</div>
+			<div class="total">总价：<em>16.80元</em></div>
+			<div class="operate_btn">
+				<a href="{%url 'main:cart'%}" class="buy_btn">立即购买</a>
+				<a href="" class="add_cart" id="add_cart">加入购物车</a>				
+			</div>
+		</div>
+	</div>
+
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+				{%for recom in recomPro%}
+				<li>
+						<a href="{%url 'main:detail' recom.id%}"><img src="/static/{{recom.pImg}}"></a>
+						<h4><a href="#">{{recom.pName}}</a></h4>
+						<div class="prize">￥{{recom.pPrice}}</div>
+				</li>
+				{%endfor%}
+				</ul>
+			</div>
+		</div>
+
+		<div class="r_wrap fr clearfix">
+			<ul class="detail_tab clearfix">
+				<li class="active">商品介绍</li>
+				<li>评论</li>
+			</ul>
+
+			<div class="tab_content">
+				<dl>
+					<dd>{{detailPro.pDetail|safe}}</dd>
+				</dl>
+			</div>
+
+		</div>
+	</div>
+
+{%endblock content%}

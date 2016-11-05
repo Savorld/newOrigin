@@ -1,0 +1,141 @@
+{% extends "foods/base.html" %}
+<!-- {% load staticfiles %} -->
+{%block goodsList%}
+<script type="text/javascript">
+	$(function(){
+		// sort相关的代码是写按价格排序用的，还没写完
+		select = 0;
+		pre = $('#pre');
+		next =$('#next');
+		// cur：记录当前页码的变量
+		cur = {{pIndex}};
+		noSortA = $('.pagenation.noSort a:eq('+cur+')');
+		sortedA = $('.pagenation.sorted a:eq('+cur+')');
+		noSortA.addClass('active');
+		// ‘上一页’的点击事件
+		pre.click(function(){
+			if(cur>1){
+				cur--;
+			};
+			pre.attr('href','/lists'+cur.toString()+'/?id='+{{id}});
+		// ‘下一页’的点击事件
+		next.click(function(){
+			});
+			if(cur<{{pageList}}.length){
+				cur++;
+			};
+			next.attr('href','/lists'+cur.toString()+'/?id='+{{id}});
+		});
+		noSort = $('.noSort');
+		sorted = $('.sorted');
+		noSort.show();
+		sorted.hide();
+		$('.sort_bar a:eq(1)').click(function(){
+			$(this).addClass('active').siblings().removeClass();
+			isSort=1;
+			noSort.hide();
+			sorted.show();
+			sortedA.addClass('active');
+		});
+	});
+</script>
+<div class="navbar clearfix">
+			<div class="subnav_con fl">
+				<h1>全部商品分类</h1>	
+				<span></span>			
+				<ul class="subnav">
+					<li><a href="{%url 'main:lists' '1'%}" class="fruit">新鲜水果</a></li>
+					<li><a href="/static/foods/#" class="seafood">海鲜水产</a></li>
+					<li><a href="/static/foods/#" class="meet">猪牛羊肉</a></li>
+					<li><a href="/static/foods/#" class="egg">禽类蛋品</a></li>
+					<li><a href="/static/foods/#" class="vegetables">新鲜蔬菜</a></li>
+					<li><a href="/static/foods/#" class="ice">速冻食品</a></li>
+				</ul>
+			</div>
+			<ul class="navlist fl">
+				<li><a href="{%url 'main:index'%}">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="{%url 'main:index'%}">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="{%url 'main:index'%}">抽奖</a></li>
+			</ul>
+		</div>
+{%endblock%}
+{%block left%}
+<div class="breadcrumb">
+	<a href="{%url 'main:index'%}">全部分类</a>
+	<span>></span>
+	<a href="{%url 'main:lists' '1'%}">新鲜水果</a>
+</div>
+	<div class="main_wrap clearfix">
+		<div class="l_wrap fl clearfix">
+			<div class="new_goods">
+				<h3>新品推荐</h3>
+				<ul>
+					{%for pro in recomPro%}
+						<li>
+								<a href="{%url 'main:detail' pro.id%}"><img src="/static/{{pro.pImg}}"></a>
+								<h4><a href="#">{{pro.pName}}</a></h4>
+								<div class="prize">￥{{pro.pPrice}}</div>
+						</li>
+					{%endfor%}
+				</ul>
+			</div>
+		</div>
+{%endblock left%}
+{%block content%}
+
+		<div class="r_wrap fr clearfix">
+			<div class="sort_bar">
+				<a class="active">默认</a>
+				<a>价格</a>
+				<a>人气</a>
+			</div>
+
+			<ul class="goods_type_list clearfix noSort">
+			{%for pro in currentList%}
+			<li>
+				<a href="{%url 'main:detail' pro.id%}"><img src="/static/{{pro.pImg}}"></a>
+				<h4><a href="{%url 'main:detail' pro.id%}">{{pro.pName}}</a></h4>
+				<div class="operate">
+					<span class="prize">￥{{pro.pPrice}}</span>
+					<span class="unit">{{pro.pPrice}}/{{pro.pUnit}}</span>
+					<a href="/static/foods/#" class="add_goods" title="加入购物车"></a>
+				</div>
+			</li>
+			{%endfor%}
+			</ul>
+
+			<ul class="goods_type_list clearfix sorted">
+			{%for pro in sortList%}
+			<li>
+				<a href="{%url 'main:detail' pro.id%}"><img src="/static/{{pro.pImg}}"></a>
+				<h4><a href="{%url 'main:detail' pro.id%}">{{pro.pName}}</a></h4>
+				<div class="operate">
+					<span class="prize">￥{{pro.pPrice}}</span>
+					<span class="unit">{{pro.pPrice}}/{{pro.pUnit}}</span>
+					<a href="/static/foods/#" class="add_goods" title="加入购物车"></a>
+				</div>
+			</li>
+			{%endfor%}
+			</ul>
+
+
+			<div class="pagenation noSort">
+				<a href="/lists{{page}}/" id='pre'><上一页</a>
+				{%for page in pageList%}
+				<a href="/lists{{page}}/?id={{id}}">{{page}}</a>
+				{%endfor%}
+				<a href="" id='next'>下一页></a>
+			</div>
+
+			<div class="pagenation sorted">
+				<a href="/lists{{page}}/?id={{id}}" id='pre'><上一页</a>
+				{%for page in sortPageList%}
+				<a href="/lists{{page}}/">{{page}}</a>
+				{%endfor%}
+				<a href="" id='next'>下一页></a>
+			</div>
+		</div>
+	</div>
+{%endblock content%}

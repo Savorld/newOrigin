@@ -1,0 +1,74 @@
+{% extends "foods/userCenterBase.html" %}
+{% load static from staticfiles%}
+{%block contentUser%}
+
+
+	<div class="main_con clearfix">
+		<div class="left_menu_con clearfix">
+			<h3>用户中心</h3>
+			<ul >
+				<li><a href="{% url 'main:userCenterInfo' '1'%}" ">· 个人信息</a></li>
+				<li><a href="{% url 'main:userCenterOrder' '1'%}" class="active">· 全部订单</a></li>
+				<li><a href="{% url 'main:userCenterSite' %}" >· 收货地址</a></li>
+			</ul>
+		</div>
+
+
+		<div class="right_content clearfix">
+				<h3 class="common_title2">全部订单</h3>
+				{%for order in shows%}
+				<ul class="order_list_th w978 clearfix">
+					<li class="col01">{{order.oTime}}</li>
+					<li class="col02">订单号：{{order.id}}</li>
+					{%if order.oIspay == True%}
+					<li class="col02 stress">已付款</li>		
+					{%else%}
+					<li class="col02 stress">待付款</li>	
+					{%endif%}	
+				</ul>
+
+				<table class="order_list_table w980">
+					<tbody>
+						<tr>
+							<td width="55%">
+								{%for detail in goodsDetail%}
+								<ul class="order_goods_list clearfix">					
+									<li class="col01"><img src="/static/{{detail.dProduct.pImg}}"></li>
+									<li class="col02">{{detail.dProduct.pName}}<em>{{detail.dPrice}}元/{{detail.dProduct.pUnit}}</em></li>	
+									<li class="col03">{{detail.dNum}}</li>
+									<li class="col04">{{detail.dPrice}}元</li>	
+								</ul>
+								{%endfor%}
+							</td>
+							<td width="15%">{{oSum}}元</td>
+							{%if order.oIspay == True%}
+							<td width="15%">已付款</td>
+							<td width="15%"><a href="#" class="oper_btn">查看物流</a></td>
+							{%else%}
+							<td width="15%">待付款</td>
+							<td width="15%"><a href="#" class="oper_btn">去付款</a></td>
+							{%endif%}	
+						</tr>
+					</tbody>
+				</table>
+				{%endfor%}	
+
+				<div class="pagenation">
+					{%if shows.has_previous%}
+					<a href="/userCenterOrder/page{{shows.previous_page_number}}"><上一页</a>
+					{%endif%}
+					{%for show in paginator.page_range%}
+					{%if pageNum == show%}
+					<a>{{show}}</a>
+					{%else%}
+					<a href="/userCenterOrder/page{{show}}">{{show}}</a>
+					{%endif%}
+					{%endfor%}
+					{% if shows.has_next %}
+					<a href="/userCenterOrder/page{{shows.next_page_number}}">下一页></a>
+					{%endif%}
+				</div>
+		</div>
+	</div>
+
+{%endblock contentUser%}

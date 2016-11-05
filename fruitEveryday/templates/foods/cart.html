@@ -1,0 +1,119 @@
+{% extends "foods/userCenterBase.html" %}
+<!-- {% load staticfiles %} -->
+{%block contentUser%}
+<!--  商品件数  --> 
+<script type="text/javascript" src="/static/foods/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+
+	
+		$('.add').mouseup(function(){
+			number = $(this).next().val();
+			number = parseInt(number);
+			number++;
+			//修改后的数量
+			$(this).next().val(number);
+			//商品价格
+			var price = $(this).parents('.col06').prev().html()
+			//数量
+			var num = $(this).next().val()
+			//小计
+			var num1 = parseFloat(price) * 100 * parseInt(num) / 100
+			
+			//显示小计的值
+			$(this).parents('.col06').next().html(num1+"元");
+
+			//请求保存数量
+			// $.get('/CartList/cNum'+$(this).next().attr('id')+"/"+$(this).next().val()+'/',function(){});
+		})
+
+		$('.minus').mouseup(function(){
+			var number = $(this).prev().val();
+			number = parseInt(number);
+			if(number>1){
+				number--;
+			}
+			//修改后的数量
+			$(this).prev().val(number);
+			//商品价格
+			var price = $(this).parents('.col06').prev().html()
+			//数量
+			var num = $(this).prev().val()
+			//小计
+			var num1 = parseFloat(price) * 100 * parseInt(num) / 100
+			
+			//显示小计的值
+			$(this).parents('.col06').next().html(num1+"元");
+			//请求保存数量
+			// $.get('/CartList/cNum'+$(this).prev().attr('id')+"/"+$(this).prev().val()+'/',function(){});
+		});
+		
+		// 当表单数据手动输入数时，改变价格
+		$('.num_show').keyup(function(){
+			var num3 = $(this).prev().attr('id')
+			var num = parseInt($(this).val())
+			if(num>num3){
+				num = num3;
+				$(this).val(num);
+			}
+			var price = $(this).parents('.col06').prev().html()
+			var num1 = parseFloat(price) * 100 * parseInt(num) / 100
+			$(this).parents('.col06').next().html(num1+"元");
+			// $.get('/CartList/cNum'+$(this).attr('id')+"/"+$(this).val()+'/',function(){});
+		});
+		$('#CheckAll').change(function() { 
+	    var $Checked = $(this).prop('checked'); 
+	    if($Checked == true){　
+	      var d = $(document).find('input:checkbox[name="Checks"]').prop('checked', true);
+
+	    }else{ 
+	      $(document).find('input:checkbox[name="Checks"]').removeProp('checked'); 
+	    } 
+		});
+
+		$sum = 0
+		$('.num_add').bind('mouseup keyup',function(){
+			$('.col07__').each(function(index,element){
+				$sum += parseFloat($('.col07').html())	
+				$('.settlements').find('.col03').find('em').text($sum)		
+			})
+		
+		})
+	});
+
+</script>
+	<div class="total_count">全部商品<em>{{cartLen}}</em>件</div>	
+	<ul class="cart_list_th clearfix">
+		<li class="col01">商品名称</li>
+		<li class="col02">商品单位</li>
+		<li class="col03">商品价格</li>
+		<li class="col04">数量</li>
+		<li class="col05">小计</li>
+		<li class="col06">操作</li>
+	</ul>
+	{%for goods in list2%}
+	<ul class="cart_list_td clearfix">
+		<li class="col01 col16"><input type="checkbox" name="Checks" checked="checked" id="col01" value="{{goods.ProductID}}"></li>
+		<li class="col02"><img src="/static/{{goods.pImg}}"></li>
+		<li class="col03">{{goods.pName}}<br><em>{{goods.pPrice}}元/kg</em></li>
+		<li class="col04">kg</li>
+		<li class="col05">{{goods.pPrice}}元</li>
+		<li class="col06">
+			<div class="num_add">
+				<a href="javascript:;" class="add fl" id={{goods.pStock}}>+</a>
+				<input type="text" class="num_show fl" value="{{goods.cNum}}" id="{{goods.id}}">
+				<a href="javascript:;" class="minus fl">-</a>	
+			</div>
+		</li>
+		<li class="col07">{{goods.ProductNumber}}元</li>
+		<li class="col08"><a href="/CartList/delete{{goods.id}}/">删除</a></li>
+	</ul>
+	{%endfor%}
+	<ul class="settlements">
+		<li class="col01"><input type="checkbox" name="" checked="checked" id="CheckAll"></li>
+		<li class="col02">全选/全不选</li>
+		<li class="col03">合计(不含运费)：<span>¥</span><em>{{ProductNumbers}}</em><br>共计<b>{{b}}</b>件商品</li>
+		<li class="col04"><a href="{%url 'main:placeOrder'%}">去结算</a></li>
+	</ul>
+
+{%endblock contentUser%}

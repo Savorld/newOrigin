@@ -1,0 +1,69 @@
+{% extends "foods/base.html" %}
+<!-- {% load staticfiles %} -->
+{%block goodsList%}
+<div class="navbar">
+			<h1 class="fl">全部商品分类</h1>
+			<ul class="navlist fl">
+				<li><a href="/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+{%endblock goodsList%}
+{%block content%}
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			<li><a href="#model01" class="fruit">新鲜水果</a></li>
+			<li><a href="#model02" class="seafood">海鲜水产</a></li>
+			<li><a href="#model03" class="meet">猪牛羊肉</a></li>
+			<li><a href="#model04" class="egg">禽类蛋品</a></li>
+			<li><a href="#model05" class="vegetables">新鲜蔬菜</a></li>
+			<li><a href="#model06" class="ice">速冻食品</a></li>
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/foods/images/slide.jpg" alt="幻灯片"></li>
+				<li><img src="/static/foods/images/slide02.jpg" alt="幻灯片"></li>
+				<li><img src="/static/foods/images/slide03.jpg" alt="幻灯片"></li>
+				<li><img src="/static/foods/images/slide04.jpg" alt="幻灯片"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/foods/images/adv01.jpg"></a>
+			<a href="#"><img src="/static/foods/images/adv02.jpg"></a>
+			<!-- bug -->
+		</div>
+	</div>
+{%for pro in proList%}
+	<div class="list_model">
+		<div class="list_title clearfix">
+			<h3 class="fl" id="model0{{pro.id}}">{{pro.sClass}}</h3>
+			<div class="subtitle fl">
+				<span>|</span>
+				{%for f in pro.productinfo_set.all|slice:":3" %}
+				<a href="#">{{f.pName}}</a>
+				{%endfor%}
+			</div>
+			<a href="/lists1?id={{pro.id}}" class="goods_more fr" id="fruit_more">查看更多 ></a>
+		</div>
+
+		<div class="goods_con clearfix">
+			<div class="goods_banner fl"><img src="/static/foods/images/banner0{{pro.id}}.jpg"></div>
+			<ul class="goods_list fl">
+			{%for fru in pro.productinfo_set.all|slice:":4"%}
+			<li>
+					<h4><a href="{%url 'main:detail' fru.id%}">{{fru.pName}}</a></h4>
+					<a href="{%url 'main:detail' fru.id%}"><img src="/static/{{fru.pImg}}"></a>
+					<div class="prize">¥ {{fru.pPrice}}</div>
+			</li>
+			{%endfor%}
+			</ul>
+		</div>
+	</div>
+{%endfor%}
+{%endblock content%}
