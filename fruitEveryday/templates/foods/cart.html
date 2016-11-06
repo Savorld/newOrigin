@@ -97,8 +97,26 @@
 		sumInput.click(function () {
 			$.post("/subBill/", sale)
 		});
+		
+		$('.col08').click(function () {
+			/* body... */
+			var id = $(this).children('a').attr('value');
+			var $good = $(this).parent('.cart_list_td');
+			$.post('/delCart/', {'id': id}, function (data) {
+				/* body... */
+				if (data['result']) {
+					$good.remove();
+				};
+			}, 'json');
+		});
+
 	});
 </script>
+<!-- <script type="text/javascript">
+	$(function(){
+		$del=$('.col08')
+	})
+</script> -->
 	<div class="total_count">全部商品<em>{{b}}</em>件</div>	
 	<ul class="cart_list_th clearfix">
 		<li class="col01">商品名称</li>
@@ -126,11 +144,11 @@
                 </div>
             </li>
             <li class="col07">{{ goods.ProductNumber }}元</li>
-            <li class="col08"><a href="/CartList/delete{{ goods.id }}/">删除</a></li>
+            <li class="col08"><a href="javascript:;" value="{{goods.id}}">删除</a></li>
         </ul>
     {% endfor %}
     <ul class="settlements">
-        <li class="col01"><input type="checkbox" name="" checked="checked" id="CheckAll"></li>
+        <li class="col01"><input type="checkbox" name="{{ goods.id }}" checked="checked" id="CheckAll"></li>
         <li class="col02">全选/全不选</li>
         <li class="col03">合计(不含运费)：<span>¥</span><em>{{ ProductNumbers }}</em><br>共计<b>{{ b }}</b>件商品
         </li>

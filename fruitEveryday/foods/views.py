@@ -385,6 +385,11 @@ def cart(request, dic, *args):
 
     return render(request, "foods/cart.html", dic2)
 
+def delCart(request):
+    id = int(request.POST['id'])
+    CartList.objects.get(pk = id).delete()
+    return JsonResponse({'result':True})
+
 
 @decorate.loginYz
 @decorate.loginName

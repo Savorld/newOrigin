@@ -36,7 +36,7 @@ class CartList(models.Model):
     cProduct = models.ForeignKey('ProductInfo')
 
     def __str__(self):
-        return '%d'%self.id
+        return self.cProduct.pName.encode('utf-8')
 
 
 class OrderList(models.Model):

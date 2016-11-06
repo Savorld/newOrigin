@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'^loginHandler/$', loginHandler, name='loginHandler'),
     url(r'^loginOut/$', loginOut, name='loginOut'),
     
-    url(r'^detail([0-9]*)/$', detail, name='detail'),
+    url(r'^detail([0-9]*)/$', detail, name='detail'), 
     url(r'^intoCart/$', intoCart, name='intoCart'),
     url(r'^lists([0-9]*)/$', lists, name='lists'),
     url(r'^cartNum/$',cartNum ,name='cartNum'),
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^cart/$', cart, name='cart'),
     url(r'^subBill/$', subBill, name='subBill'),
     url(r'^placeOrder/$', placeOrder, name='placeOrder'),
+    url(r'^delCart/$', delCart, name='delCart'),
 
     url(r'^base/$', base, name='base'),
     url(r'^baseBottom/$', baseBottom, name='bottom'),
