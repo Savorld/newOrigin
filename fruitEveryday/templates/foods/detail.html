@@ -1,5 +1,6 @@
 {% extends "foods/base.html" %}
 <!-- {% load staticfiles %} -->
+{% block title%}天天生鲜-商品详情{%endblock%}
 {%block goodsList%}
 <script type="text/javascript">
 	$(function(){
@@ -23,7 +24,7 @@
 			add.click(function(){
 				pre++;
 				num.val(pre);
-				multi();
+				multi(); 
 			});
 			// 绑定‘数量-’按钮的点击事件
 			minus.click(function(){

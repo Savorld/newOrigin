@@ -23,11 +23,11 @@ urlpatterns = [
     url(r'^userCenterSiteHandle/$', userCenterSiteHandle, name='userCenterSiteHandle'),
     
     url(r'^cart/$', cart, name='cart'),
+    url(r'^subBill/$', subBill, name='subBill'),
     url(r'^placeOrder/$', placeOrder, name='placeOrder'),
 
     url(r'^base/$', base, name='base'),
     url(r'^baseBottom/$', baseBottom, name='bottom'),
     url(r'^userCenterBase/$',userCenterBase,name='userCenterBase'),
-    url(r'^subBill/$', subBill, name='subBill'),
 ]
 

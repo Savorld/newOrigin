@@ -2,9 +2,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title></title>
+    <title>天天生鲜搜索页</title>
+    <style type="text/css">
+        .search{
+            width: 1200px;
+            background-color: gold;
+            height: 100px;
+        }
+
+    </style>
 </head>
 <body>
+<div class="search">
 {% block content %}
 {% if query %}
     <h3>&nbsp;&nbsp;&nbsp;&nbsp;搜索结果如下：</h3>
@@ -24,5 +33,6 @@
     {% endif %}
 {% endif %}
 {% endblock %}
+</div>
 </body>
 </html>

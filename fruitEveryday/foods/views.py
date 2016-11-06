@@ -1,4 +1,4 @@
-# coding=utf-8
+# coding=utf-8 
 from django.shortcuts import *
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator
