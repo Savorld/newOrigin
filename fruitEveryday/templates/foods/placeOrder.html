@@ -66,5 +66,22 @@
 		<a href="javascript:;" id="order_btn">提交订单</a>
 	</div>
 
+	<script type="text/javascript">
+        $(function () {
+            defsale = [];
+            {% for foo in carts %}
+                defsale.push({{foo.id}});
+            {% endfor %}
+
+            delSaleList = {
+                'defsale': JSON.stringify(defsale)
+            };
+            Input = $('.order_submit input');
+            Input.click(function () {
+                $.post('/delCartData/', delSaleList)
+            })
+        })
+    </script>
+
 
 {%endblock contentUser%}
