@@ -79,6 +79,24 @@
 				$('.settlements').find('.col03').find('em').text($sum)		
 			})
 		})
+
+		saleSum = $('.settlements .col03 em').text();
+        goodsIds = [];
+		goodsNum = [];
+		{% for goods in list2 %}
+			goodsIds.push({{ goods.ProductID_id }});
+			goodsNum.push({{ goods.cNum }});
+		{% endfor %}
+		sale = {
+			"saleSum": saleSum,
+			"goodsIds": JSON.stringify(goodsIds),
+			"goodsNum": JSON.stringify(goodsNum),
+		};
+
+		sumInput = $('.settlements .col04 input');
+		sumInput.click(function () {
+			$.post("/subBill/", sale)
+		});
 	});
 </script>
 	<div class="total_count">全部商品<em>{{b}}</em>件</div>	
@@ -90,7 +108,6 @@
 		<li class="col05">小计</li>
 		<li class="col06">操作</li>
 	</ul>
-<form action="/subBill/" method="post">
     {% for goods in list2 %}
         <ul class="cart_list_td clearfix">
             <li class="col01 col16"><input type="checkbox" name="Checks" checked="checked" id="col01"
@@ -117,11 +134,7 @@
         <li class="col02">全选/全不选</li>
         <li class="col03">合计(不含运费)：<span>¥</span><em>{{ ProductNumbers }}</em><br>共计<b>{{ b }}</b>件商品
         </li>
-        <input name="ProductNumbers" value="{{ ProductNumbers }}" type="hidden">
-        <input name="unitPrice" value="{{ goods.pPrice }}" type="hidden">
-        <input name="saleNum" value="{{ b }}" type="hidden">
         <li class="col04"><input type="submit" value="去结算"></li>
     </ul>
-</form>
 
 {%endblock contentUser%}

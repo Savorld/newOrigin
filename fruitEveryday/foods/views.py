@@ -394,21 +394,20 @@ def subBill(request):
     购物车数据提交后台处理
     """
     userSession = UserInfo.objects.get(pk=5)
-    ProductNumbers = request.POST['ProductNumbers']
-    OrderID = OrderList.objects.create(
-        oSum = ProductNumbers,
-        oIspay=False,
-        oUser=userSession
-    )
-    goodsId = request.POST['Checks']
-    saleSum = request.POST['saleSum']
-    # productPrice = request.POST['unitPrice']  # 原本是浮点型，因数据库字段设计有误，强制整型
-    detailOrder = DetailOrder.objects.create(
-        dNum=saleSum,
-        dPrice=ProductInfo.objects.get(pk=goodsId).pPrice,
-        dMain=OrderList.objects.get(pk=OrderID.id),
-        dProduct=ProductInfo.objects.get(pk=int(goodsId))
-    )
+    ProductNumbers = request.POST.get('saleSum')  # 购物车商品总价
+    OrderID = OrderList.objects.create(oSum=ProductNumbers, oIspay=False, oUser=userSession)
+    ProductID = json.loads(request.POST['goodsIds']) # 购物车每个商品id
+    ProductNum = json.loads(request.POST['goodsNum']) # 每个商品购买的数量
+    
+    # 使用下标取值
+    for i in range(len(ProductID)):
+        pNum = ProductNum[i]
+        pId = ProductID[i]
+        detailOrder = DetailOrder.objects.create(dNum=pNum, dPrice=ProductInfo.objects.get(pk=pId).pPrice,
+                                                 dMain=OrderList.objects.get(pk=OrderID.id),
+                                                 dProduct=ProductInfo.objects.get(pk=int(pId)))
+
+    return redirect('/userCenterSite/')
 
 # 空视图（备用）
 
