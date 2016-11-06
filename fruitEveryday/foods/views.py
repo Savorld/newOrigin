@@ -14,7 +14,7 @@ def index(request, dic, *args):
     '''
     首页，登录后用装饰器函数实现username的传值，*args 为可变参数
     模板内部双层循环取值先
-
+     ====
     '''
     if dic['username']:
 
@@ -210,6 +210,30 @@ def detail(request, dic, *args):
     dic2 = dict(dic, **dic1)
 
     return render(request, 'foods/detail.html', dic2)
+
+@decorate.loginName
+def addCart(request, dic, *args):
+    
+    id = int(request.POST['id'])
+    user = UserInfo.objects.get(uName=dic['username'])
+    cart = CartList.objects.filter(cUser = user.id ,cProduct = id )
+    if len(cart) == 0:
+        pro = ProductInfo.objects.get(pk= id)
+        
+        CartList.objects.create(
+                cNum = 1,
+                cUser = user,
+                cProduct = pro ,
+                cPrice = pro.pPrice,
+        )
+    else:
+        cart = CartList.objects.get(cUser = user.id ,cProduct = id )
+        # num = cart.cNum + 1
+        cart.cNum += 1
+        cart.save()
+
+    return HttpResponse('ok')
+
 
 
 @decorate.loginYz

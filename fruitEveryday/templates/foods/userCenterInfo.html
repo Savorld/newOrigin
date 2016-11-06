@@ -4,9 +4,23 @@
 {%block contentUser%}
 <script type="text/javascript">
 
-	$(function(){
-		$.post('/recentMap/',data)
+	// $(function(){
+	// 	$.post('/recentMap/',data)
+	// });
+
+
+	$(function () {
+		var $addCart = $('.add_goods')
+
+		$addCart.click(function () {
+			var id = $(this).attr('value');
+			data = {
+				'id' : id,
+			}
+			$.post('/addCart/',data);
+		});
 	});
+	
 </script>
 <div class="main_con clearfix">
 			<div class="left_menu_con clearfix">
@@ -40,7 +54,7 @@
 					<div class="operate">
 						<span class="prize">￥{{goodsret.pPrice}}</span>
 						<span class="unit">{{goodsret.pPrice}}/{{goodsret.pUnit}}</span>
-						<a href="/static/foods/#" class="add_goods" title="加入购物车"></a>
+						<a href="#" class="add_goods" value="{{goodsret.id}}" title="加入购物车"></a>
 					</div>
 				</li>		
 				{%endfor%}	

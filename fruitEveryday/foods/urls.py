@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^intoCart/$', intoCart, name='intoCart'),
     url(r'^lists([0-9]*)/$', lists, name='lists'),
     url(r'^cartNum/$',cartNum ,name='cartNum'),
+    url(r'^addCart/$',addCart ,name='addCart'),
 
 
     url(r'^userCenterInfo([0-9]*)/$', userCenterInfo, name='userCenterInfo'),
