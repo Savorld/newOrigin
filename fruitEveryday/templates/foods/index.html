@@ -46,7 +46,7 @@
 			<div class="subtitle fl">
 				<span>|</span>
 				{%for f in pro.productinfo_set.all|slice:":3" %}
-				<a href="#">{{f.pName}}</a>
+				<a href="{%url 'main:detail' f.id%}">{{f.pName}}</a>
 				{%endfor%}
 			</div>
 			<a href="/lists1?id={{pro.id}}" class="goods_more fr" id="fruit_more">查看更多 ></a>

@@ -16,13 +16,19 @@ def index(request, dic, *args):
     模板内部双层循环取值先
 
     '''
-    # user = UserInfo.objects.get(uName=dic['username'])
-    # cart = CartList.objects.filter(cUser=user.id)
-    # countDate = cart.aggregate(Count('id'))
+    if dic['username']:
 
+        user = UserInfo.objects.get(uName=dic['username'])
+        cart = CartList.objects.filter(cUser=user.id)
+        countDate = cart.aggregate(Count('id'))
+        count = countDate['id__count']
+    else:
+        count = 0
+
+
+    dic['count'] = count
     pro = Sort.objects.all()
     dic['proList'] = pro
-    # dic['count'] = countDate['id__count']
     return render(request, 'foods/index.html', dic)
 
 
@@ -144,6 +150,16 @@ def lists(request, dic, *args):
     '''
     某类商品的列表,通过id实现商品类的选择，通过index实现翻页的功能
     '''
+    if dic['username']:
+
+        user = UserInfo.objects.get(uName=dic['username'])
+        cart = CartList.objects.filter(cUser=user.id)
+        countDate = cart.aggregate(Count('id'))
+        count = countDate['id__count']
+    else:
+        count = 0
+
+
     index = args[0]
     id = request.GET.get('id')
     subList = ProductInfo.objects.filter(pClass=int(id))
@@ -166,6 +182,7 @@ def lists(request, dic, *args):
         'sortList': sortList,
         'currentList': currentList,
         'sortPageList': sortPageList,
+        'count' : count,
     }
     dic2 = dict(dic, **dic1)
 
@@ -178,10 +195,11 @@ def detail(request, dic, *args):
     某个商品的详细信息页面
     '''
     id = args[0]
-    user = UserInfo.objects.get(uName=dic['username'])
-
-    userid = user.id
-    cartNum = len(CartList.objects.filter(cUser=userid))
+    if dic['username']:
+        userid = UserInfo.objects.get(uName=dic['username']).id
+        cartNum = len(CartList.objects.filter(cUser=userid))
+    else:
+        cartNum = 0
     detail = ProductInfo.objects.get(pk=id)
     recom = ProductInfo.objects.all()[0:2]
     dic1 = {
@@ -215,6 +233,7 @@ def userCenterInfo(request, dic, *args):
     }
     dic2 = dict(dic, **dic1)
     return render(request, 'foods/userCenterInfo.html', dic2)
+
 
 @decorate.loginYz
 @decorate.loginName
@@ -370,7 +389,30 @@ def placeOrder(request, dic, *args):
     return render(request, 'foods/placeOrder.html', dic2)
 
 
+def subBill(request):
+    """
+    购物车数据提交后台处理
+    """
+    userSession = UserInfo.objects.get(pk=5)
+    ProductNumbers = request.POST['ProductNumbers']
+    OrderID = OrderList.objects.create(
+        oSum = ProductNumbers,
+        oIspay=False,
+        oUser=userSession
+    )
+    goodsId = request.POST['Checks']
+    saleSum = request.POST['saleSum']
+    # productPrice = request.POST['unitPrice']  # 原本是浮点型，因数据库字段设计有误，强制整型
+    detailOrder = DetailOrder.objects.create(
+        dNum=saleSum,
+        dPrice=ProductInfo.objects.get(pk=goodsId).pPrice,
+        dMain=OrderList.objects.get(pk=OrderID.id),
+        dProduct=ProductInfo.objects.get(pk=int(goodsId))
+    )
+
 # 空视图（备用）
+
+
 def baseBottom(request):
 
     return render(request, 'foods/baseBottom.html')
@@ -395,20 +437,8 @@ def baseBottom(request):
 def userCenterBase(request):
     return render(request, 'foods/userCenterBase.html')
 
+
 def base(request):
     return render(request, 'foods/base.html')
 
-def subBill(request):
-    """
-    购物车数据提交后台处理
-    """
-    userSession = UserInfo.objects.get(pk=5)
-    ProductNumbers = request.POST['ProductNumbers']
-    OrderID = OrderList.objects.create(oSum=ProductNumbers, oIspay=False, oUser=userSession)
-    goodsId = request.POST['Checks']
-    saleSum = request.POST['saleSum']
-    # productPrice = request.POST['unitPrice']  # 原本是浮点型，因数据库字段设计有误，强制整型
-    detailOrder = DetailOrder.objects.create(dNum=saleSum, dPrice=ProductInfo.objects.get(pk=goodsId).pPrice,
-                                             dMain=OrderList.objects.get(pk=OrderID.id),
-                                             dProduct=ProductInfo.objects.get(pk=int(goodsId)))
     return redirect('/userCenterSite/')
