@@ -433,6 +433,16 @@ def subBill(request):
 
     return redirect('/userCenterSite/')
 
+
+def delCartData(request):
+    """
+    删除购物车表数据
+    """
+    defProductId = json.loads(request.POST['defsale'])
+    for pId in defProductId:
+        delsalePro = CartList.objects.filter(pk=pId).delete()
+    return HttpResponseRedirect('/index/')  # 现在index首页有点问题，可能无法跳转
+
 # 空视图（备用）
 
 
