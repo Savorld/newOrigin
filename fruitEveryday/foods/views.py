@@ -14,7 +14,7 @@ def index(request, dic, *args):
     '''
     首页，登录后用装饰器函数实现username的传值，*args 为可变参数
     模板内部双层循环取值先
-     ====
+     =======
     '''
     if dic['username']:
 
