@@ -4,6 +4,7 @@
 {%block contentUser%}
 <!--  商品件数  --> 
 <script type="text/javascript" src="/static/foods/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="/static/foods/js/subCss.js"></script>
 <script type="text/javascript">
 	$(function(){
 
@@ -192,6 +193,6 @@
         <li class="col02">全选/全不选</li>
         <li class="col03">合计(不含运费)：<span>¥</span><em>{{ ProductNumbers }}</em><br>共计<b>{{ b }}</b>件商品
         </li>
-        <li class="col04"><input typy="submit" value="去结算"></li>
+        <li class="col04"><input id="sub" typy="submit" value="去结算"></li>
     </ul>
 {%endblock contentUser%}

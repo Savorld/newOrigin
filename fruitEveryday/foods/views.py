@@ -423,6 +423,7 @@ def subBill(request):
     """
     购物车数据提交后台处理
     """
+    userSession = UserInfo.objects.get(pk=5)
     ProductNumbers = request.POST.get('saleSum')  # 购物车商品总价
     OrderID = OrderList.objects.create(oSum=ProductNumbers, oIspay=False, oUser=userSession)
     ProductID = json.loads(request.POST['goodsIds']) # 商品ID
