@@ -14,7 +14,7 @@ def index(request, dic, *args):
     '''
     首页，登录后用装饰器函数实现username的传值，*args 为可变参数
     模板内部双层循环取值先
-     =======
+     ======= 
     '''
     if dic['username']:
 
@@ -354,7 +354,8 @@ def userCenterSiteHandle(request, dic, *args):
 def cart(request, dic, *args):
 
     # 查询条件
-    carts = CartList.objects.all()
+    user = UserInfo.objects.get(uName = dic['username'])
+    carts = CartList.objects.filter(cUser=user.id)
     b = len(carts)
     list2 = []
     ProductNumbers = 0
@@ -365,14 +366,14 @@ def cart(request, dic, *args):
             ProductNumbers = ProductNumbers + ProductNumber
             values = {
                 'id': i.id,
-                'ProductID_id': i.cProduct.id,
                 'pImg': d.pImg,
+                'cNum': i.cNum,
+                'pUnit': d.pUnit,
                 'pName': d.pName,
                 'pPrice': d.pPrice,
-                'cNum': i.cNum,
-                'ProductNumber': ProductNumber,
-                'pUnit': d.pUnit,
                 'pStock': d.pStock,
+                'ProductNumber': ProductNumber,
+                'ProductID_id': i.cProduct.id,
             }
             list2.append(values)
 
@@ -397,7 +398,7 @@ def placeOrder(request, dic, *args):
     # 修改查询条件
 
     carts = CartList.objects.all()
-    user = UserInfo.objects.get(pk=5)
+    user = UserInfo.objects.get(uName = dic['username'])
     f = len(carts)
     ProductNumbers = 0
     for i in carts:
