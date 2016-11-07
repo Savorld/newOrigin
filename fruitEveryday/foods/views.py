@@ -423,11 +423,12 @@ def subBill(request):
     """
     购物车数据提交后台处理
     """
-    userSession = UserInfo.objects.get(pk=5)
     ProductNumbers = request.POST.get('saleSum')  # 购物车商品总价
     OrderID = OrderList.objects.create(oSum=ProductNumbers, oIspay=False, oUser=userSession)
-    ProductID = json.loads(request.POST['goodsIds']) # 购物车每个商品id
-    ProductNum = json.loads(request.POST['goodsNum']) # 每个商品购买的数量
+    ProductID = json.loads(request.POST['goodsIds']) # 商品ID
+    ProductNum = json.loads(request.POST['goodsNum']) # 商品单价
+    ProductID = [x for x in ProductID]
+    ProductNum = [i for i in ProductNum]
     
     # 使用下标取值
     for i in range(len(ProductID)):

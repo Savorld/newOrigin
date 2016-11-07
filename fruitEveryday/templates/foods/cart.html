@@ -117,6 +117,43 @@
 			}, 'json');
 		});
 
+		// 购物车数据提交处理
+		saleSum = $('.settlements .col03 em').text();
+		goodsIds = [];
+		goodsNum = [];
+
+
+		$(':checkbox:not(#CheckAll)').click(function () {
+			if ($(this).prop('checked')) {
+				$(this).attr('name', 'Checks')
+			} else {
+				$(this).attr('name', '')
+			}
+		});
+		sumInput = $('.settlements .col04 input');
+		sumInput.click(function () {
+			// 遍历选中的商品的ID
+			Input = $("input[name='Checks']").each(function (i) {
+
+				goodsIds[i] = $(this).val()
+			});
+
+			// 遍历选中商品的单品数量
+			Input = $("input[name='saleSum']").each(function (i) {
+				goodsNum[i] = $(this).val()
+			});
+
+			sale = {
+				"saleSum": saleSum,
+				"goodsIds": JSON.stringify(goodsIds),
+				"goodsNum": JSON.stringify(goodsNum),
+				{#                "goodsPrice": JSON.stringify(goodsPrice)#}
+
+			};
+
+			$.post("/subBill/", sale)
+		});
+
 	});
 </script>
 
