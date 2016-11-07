@@ -12,5 +12,19 @@ $(function () {
  'font-family':'Microsoft Yahei',
  'cursor':'pointer'
 });
+
+    $('#suborder').css({
+ 'color':'#fff',
+ 'width':'160px',
+ 'height':'40px',
+ 'font-family':'Microsoft Yahei',
+ 'font-size':'16px',
+ 'backgroundColor':'#47aa34',
+ 'cursor':'pointer',
+ 'border':0,
+ 'float':'right',
+ 'marginTop':'20px',
+ 'marginRight':'40px'
+})
 });
 
